@@ -21,7 +21,9 @@ export const createPost = async (req, res) => {
 	try {
 		const { content, image } = req.body;
 		let newPost;
-
+		if(!content){
+			res.status(400).json({message:"No content"});
+		}
 		if (image) {
 			const imgResult = await cloudinary.uploader.upload(image);
 			newPost = new Post({
@@ -41,6 +43,7 @@ export const createPost = async (req, res) => {
 		res.status(201).json(newPost);
 	} catch (error) {
 		console.error("Error in createPost controller:", error);
+		
 		res.status(500).json({ message: "Server error" });
 	}
 };
